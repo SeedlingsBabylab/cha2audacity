@@ -127,11 +127,11 @@ def create_clips(clips, block_index):
         time = interval_str.split("_")
         time = [int(time[0]), int(time[1])]
 
-        final_time = ms_to_hhmmss(time)
+        final_time = ms_to_s(time)
 
-        curr_clip.start_time = str(final_time[0])
-        curr_clip.end_time = str(final_time[1])
-        curr_clip.offset_time = str(final_time[2])
+        curr_clip.start_time = final_time[0]
+        curr_clip.end_time = final_time[1]
+        # curr_clip.offset_time = str(final_time[2])
 
         block.clips.append(curr_clip)
 
@@ -146,25 +146,9 @@ def create_clips(clips, block_index):
     return block
 
 
-def ms_to_hhmmss(interval):
-    x_start = datetime.timedelta(milliseconds=interval[0])
-    x_end = datetime.timedelta(milliseconds=interval[1])
-
-    x_diff = datetime.timedelta(milliseconds=interval[1] - interval[0])
-
-    start = ""
-    if interval[0] == 0:
-        start = "0" + x_start.__str__()[:11] + ".000"
-    else:
-
-        start = "0" + x_start.__str__()[:11]
-        if start[3] == ":":
-            start = start[1:]
-    end = "0" + x_end.__str__()[:11]
-    if end[3] == ":":
-        end = end[1:]
-
-    return [start, end, x_diff]
+def ms_to_s(interval):
+    seconds = [float(x)/1000 for x in interval]
+    return seconds
 
 
 def to_audacity_labels(block):
@@ -172,7 +156,7 @@ def to_audacity_labels(block):
 
     with open(output, "wb") as out:
         for clip in block.clips:
-            out.write("{}\t{}\t{}".format(clip.start_time, clip.offset_time ))
+            out.write("{:.6f} {:.6f} {}\n".format(clip.start_time, clip.end_time, clip.clip_tier))
 
 if __name__ == "__main__":
 
@@ -182,4 +166,4 @@ if __name__ == "__main__":
 
     parse_clan(cha_file)
 
-    print
+    to_audacity_labels(the_block)
