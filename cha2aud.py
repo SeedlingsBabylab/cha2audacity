@@ -111,6 +111,7 @@ def reverse_parent_lookup(block, multi_clip):
 def create_clips(clips, block_index):
 
     block = Block(block_index)
+    first_clip_onset = None
 
     for index, clip in enumerate(clips):
 
@@ -126,6 +127,12 @@ def create_clips(clips, block_index):
 
         time = interval_str.split("_")
         time = [int(time[0]), int(time[1])]
+
+        if index == 0:
+            first_clip_onset = time[0]
+            print time
+
+        time = [x-first_clip_onset for x in time]
 
         final_time = ms_to_s(time)
 
