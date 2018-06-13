@@ -2,6 +2,7 @@ import sys
 import re
 import datetime
 
+
 class Block:
     def __init__(self, index):
 
@@ -19,6 +20,7 @@ class Block:
 
     def sort_clips(self):
         self.clips.sort(key=lambda x: x.clip_index)
+
 
 class Clip:
     def __init__(self, block_index, clip_index):
@@ -38,8 +40,6 @@ class Clip:
         self.label_date = None
         self.coder = None
         self.lab_key = None
-
-
 
 
 the_block = None
@@ -73,6 +73,7 @@ def parse_clan(path):
     #     self.clip_blocks.append(self.create_clips(block, path, index + 1))
 
     find_multitier_parents()
+
 
 def filter_conversation(conversation):
 
@@ -132,7 +133,7 @@ def create_clips(clips, block_index):
             first_clip_onset = time[0]
             print time
 
-        time = [x-first_clip_onset for x in time]
+        time = [x - first_clip_onset for x in time]
 
         final_time = ms_to_s(time)
 
@@ -154,16 +155,17 @@ def create_clips(clips, block_index):
 
 
 def ms_to_s(interval):
-    seconds = [float(x)/1000 for x in interval]
+    seconds = [float(x) / 1000 for x in interval]
     return seconds
 
 
 def to_audacity_labels(block):
 
-
     with open(output, "wb") as out:
         for clip in block.clips:
-            out.write("{:.6f} {:.6f} {}\n".format(clip.start_time, clip.end_time, clip.clip_tier))
+            out.write("{:.6f} {:.6f} {}\n".format(
+                clip.start_time, clip.end_time, clip.clip_tier))
+
 
 if __name__ == "__main__":
 
